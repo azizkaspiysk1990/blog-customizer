@@ -27,12 +27,12 @@ type Props = {
 };
 
 export const ArticleParamsForm: React.FC<Props> = ({ onApply }) => {
-	const [open, setOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [settings, setSettings] =
 		useState<ArticleStateType>(defaultArticleState);
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const handleToggle = () => setOpen((prev) => !prev);
+	const handleToggle = () => setIsMenuOpen((prev) => !prev);
 
 	const mergeSettings = useCallback((patch: Partial<ArticleStateType>) => {
 		setSettings((prev) => ({ ...prev, ...patch }));
@@ -41,19 +41,19 @@ export const ArticleParamsForm: React.FC<Props> = ({ onApply }) => {
 	const onSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		onApply(settings);
-		setOpen(false);
+		setIsMenuOpen(false);
 	};
 
 	const handleReset = () => {
 		setSettings(defaultArticleState);
 		onApply(defaultArticleState);
-		setOpen(false);
+		setIsMenuOpen(false);
 	};
 
 	useCloseForm({
-		isOpen: open,
+		isOpen: isMenuOpen,
 		refForm: formRef,
-		onClose: () => setOpen(false),
+		onClose: () => setIsMenuOpen(false),
 	});
 
 	const placeholders = useMemo(
@@ -70,9 +70,9 @@ export const ArticleParamsForm: React.FC<Props> = ({ onApply }) => {
 
 	return (
 		<>
-			<ArrowButton isOpen={open} onClick={handleToggle} />
+			<ArrowButton isOpen={isMenuOpen} onClick={handleToggle} />
 
-			<aside className={clsx(s.container, { [s.container_open]: open })}>
+			<aside className={clsx(s.container, { [s.container_open]: isMenuOpen })}>
 				<form ref={formRef} className={s.form} onSubmit={onSubmit}>
 					<Text as='h2' size={31} weight={800} uppercase>
 						Настройка статьи
